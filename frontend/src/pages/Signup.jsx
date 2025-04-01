@@ -23,7 +23,7 @@ function Signup() {
 
   return (
     <div className='flex items-center justify-center h-screen bg-stone-900'>
-      <div className='w-80  p-6 bg-stone-400 rounded-lg shadow-lg'>
+      <div className='w-80  p-6 bg-stone-100 rounded-lg shadow-lg'>
         <h2>SignUP</h2>
         {error && <p className='text-red-500 text-sm text-center'>{error}</p>}
         <form onSubmit={handleSubmit} className='space-y-4'>
