@@ -14,7 +14,7 @@ exports.userSignup = async(req,res,next)=>{
     }
 
     if(!name || !email || !password){
-        return res.status(400).json({success: false , message: "ALL feilds are required for the register"});
+        return res.status(400).json({success: false , message: "ALL fields are required for the register"});
     }
     const hasedpassword = await bcrypt.hash(password,10)
 
@@ -22,8 +22,12 @@ exports.userSignup = async(req,res,next)=>{
         name , email , password:hasedpassword
     })
     await newUser.save();
+    
+    // Convert to object and remove password
+   let userResponse = newUser.toObject();
+   delete userResponse.password;
 
-    return res.status(200).json({data:"hello from the user signup",newUser});
+    return res.status(200).json({data:"Registered Successfully",userResponse});
    } catch (error) {
     next(error)
    }
@@ -34,14 +38,14 @@ exports.userLogin = async(req,res,next)=>{
         const {email ,password} = req.body;
 
         if(!email || !password){
-            return res.status(400).json({success:false , message: "emial and password are required"});
+            return res.status(400).json({success:false , message: "email and password are required"});
         }
 
         let user = await User.findOne({email});
         
-        const psword =  bcrypt.compare(user.password,password);
+        const match =  bcrypt.compare(user.password,password);
 
-        if(!psword){
+        if(!match){
             return res.status(400).json({success:false,message:"password is incorrect Please try again"});
         }
 
