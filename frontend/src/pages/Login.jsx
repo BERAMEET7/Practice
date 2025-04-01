@@ -23,7 +23,7 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-stone-900">
-            <div className="w-96 p-6 bg-stone-100 rounded-lg shadow-lg">
+            <div className="w-96 p-6 bg-stone-100 rounded-lg shadow-lg flex flex-col gap-3">
                 <h2 className="text-2xl font-bold text-center">Login</h2>
                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
                 <form onSubmit={handleSubmit} className="space-y-4">
