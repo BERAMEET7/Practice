@@ -16,6 +16,13 @@ exports.userSignup = async(req,res,next)=>{
     if(!name || !email || !password){
         return res.status(400).json({success: false , message: "ALL fields are required for the register"});
     }
+
+    if (email){
+        const checkemail = await User.findOne({email});
+        if(checkemail){
+            return res.status(400).json({success: false , message:"Email Already Exists! Go with Login"});
+        }
+    }
     const hasedpassword = await bcrypt.hash(password,10)
 
     let newUser = new User ({
@@ -31,6 +38,15 @@ exports.userSignup = async(req,res,next)=>{
    } catch (error) {
     next(error)
    }
+}
+
+exports.getAllUser = async(req,res,next)=>{
+    try {
+        const users = await User.find();
+        return res.status(200).json({success:true, users});
+    } catch (error) {
+        next(error)
+    }
 }
 
 exports.userLogin = async(req,res,next)=>{
@@ -58,5 +74,21 @@ exports.userLogin = async(req,res,next)=>{
         return res.status(200).json({success:true,token ,message:"Login Successfully"});
     } catch (error) {
         next(error);
+    }
+}
+
+exports.deleteUser = async(req,res,next)=>{
+    try {
+        const {userID} = req.params;
+
+        const deletedUser = await User.findByIdAndDelete(userID);
+
+        if(deletedUser){
+            return res.status(200).json({success:true, deletedUser});
+        }
+
+        return res.status(400).json({success:false, message:"User not Deleted ! Try Again "})
+    } catch (error) {
+        next(error)
     }
 }
